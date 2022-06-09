@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Form, Row, Col, InputGroup, FormControl, Button, Alert } from 'react-bootstrap';
-import logo from './buk-logo.svg';
 import './App.css';
 
 function App() {
@@ -18,17 +17,14 @@ function App() {
   const url = 'http://127.0.0.1:8000/'
   // Funcion para obtener API
   const obtenerAPI = async () => {
-    const respuesta = await fetch(url + 'prueba/numerosPrimos', {     
-        method: "POST",
-        body: JSON.stringify({
-          valor: inputValue
-        })
-    })  
+    const respuesta = await fetch(url + 'prueba/numerosPrimos?valor='+inputValue, {     
+        method: "GET"
+    })
     const plainRespuesta = await respuesta
     const responseJSON = await respuesta.json()
     // Guardo las respuestas
     setStatus(plainRespuesta.status)
-    setValorAPI(plainRespuesta.valorRecibido)
+    setValorAPI(responseJSON.valorRecibido)
     // setValorAPI(responseJSON.valorRecibido)
     setPrimosAPI(responseJSON.numerosPrimos)
     setMSG(responseJSON.msg)
@@ -59,7 +55,7 @@ function App() {
               <Col md="4">
                 <Alert variant="success">
                   <p>Parámetro recibido: { valorAPI }</p>
-                  <p>Respuesta: { primosAPI }</p>
+                  <p>Respuesta: { Array.isArray(primosAPI) ? primosAPI : primosAPI }</p>
                   <p>Mensaje: { msgAPI }</p>
                 </Alert>
               </Col> 
